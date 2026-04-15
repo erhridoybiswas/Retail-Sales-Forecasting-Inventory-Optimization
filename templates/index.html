@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Retail Dashboard</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+    <h1>📊 Retail Forecasting Dashboard</h1>
+
+    <div class="card">
+        <form action="/predict" method="post">
+
+            <label>Store</label>
+            <select name="store" id="store" onchange="loadItems()">
+                {% for s in stores %}
+                <option value="{{s}}">{{s}}</option>
+                {% endfor %}
+            </select>
+
+            <label>Item</label>
+            <select name="item" id="item"></select>
+
+            <button type="submit">🔍 Generate Forecast</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function loadItems(){
+fetch("/items/"+document.getElementById("store").value)
+.then(res=>res.json())
+.then(data=>{
+let item=document.getElementById("item");
+item.innerHTML="";
+data.items.forEach(i=>{
+let o=document.createElement("option");
+o.value=i;o.text=i;
+item.appendChild(o);
+});
+});
+}
+window.onload=loadItems;
+</script>
+
+</body>
+</html>

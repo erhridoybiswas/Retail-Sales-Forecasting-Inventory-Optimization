@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Results</title>
+<link rel="stylesheet" href="/static/css/style.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>📈 Forecast Dashboard</h1>
+<h3>{{store}} - {{item}}</h3>
+
+<!-- KPI BOXES -->
+<div class="kpi-container">
+    <div class="kpi">Safety Stock<br><b>{{inv.safety_stock}}</b></div>
+    <div class="kpi">Reorder Point<br><b>{{inv.reorder_point}}</b></div>
+    <div class="kpi">EOQ<br><b>{{inv.eoq}}</b></div>
+    <div class="kpi highlight">Order Qty<br><b>{{inv.order_qty}}</b></div>
+</div>
+
+<!-- CHART -->
+<div class="card">
+    <canvas id="chart"></canvas>
+</div>
+
+<!-- TABLE -->
+<div class="card">
+<table>
+<tr><th>Date</th><th>Forecast</th></tr>
+{% for r in forecast %}
+<tr><td>{{r.date}}</td><td>{{r.forecast}}</td></tr>
+{% endfor %}
+</table>
+</div>
+
+<a href="/" class="back">⬅ Back</a>
+
+</div>
+
+<script>
+const ctx = document.getElementById('chart');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{chart_dates | safe}},
+        datasets: [{
+            label: 'Forecast',
+            data: {{chart_values | safe}},
+            borderWidth: 2
+        }]
+    }
+});
+</script>
+
+</body>
+</html>
